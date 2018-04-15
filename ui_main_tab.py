@@ -22,7 +22,7 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.setupUi(self)
         # appel de la classe du module dbessai
         self.LaBase = LaBase()
-        self.model = QSqlTableModel()
+        self.model = Model()
         self.model.setTable("Contact")
         self.model.setEditStrategy(QSqlTableModel.OnRowChange)
         self.model.select()
@@ -87,7 +87,57 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
     def on_Effacer_clicked(self):
         self.remove_row()
 
+class Model(QSqlTableModel):
+    def __init__(self, parent=None):
+        super(Model, self).__init__(parent)
+        self.setEditStrategy(QSqlTableModel.OnFieldChange)
 
+        self.setTable("Contact")
+        self.select()
+
+    def columnCount(self, parent=QModelIndex()):
+        # this is probably obvious
+        # since we are adding a virtual column, we need one more column
+        return super(Model, self).columnCount() + 1
+
+    def data(self, index, role=Qt.DisplayRole):
+        if role == Qt.DisplayRole and index.column() == 4:
+            # 2nd column is our virtual column.
+            # if we are there, we need to calculate and return the value
+            # we take the first two columns, get the data, turn it to integer and sum them
+            # [0] at the end is necessary because pyqt returns value and a bool
+            # http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qvariant.html#toInt
+            return self.data(self.index(index.row(),0)) - self.data(self.index(index.row(),0))
+            #return  sum(self.data(self.index(index.row(), i)).toInt()[0] for i in range(2))
+        if index.column() > 4:
+            # if we are past 2nd column, we need to shift it to left by one
+            # to get the real value
+            index = self.index(index.row(), index.column() - 1)
+        # get the value from base implementation
+        return super(Model, self).data(index, role)
+
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        # this is similar to `data`
+        if section == 4 and orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            return 'Sum'
+        if section > 4 and orientation == Qt.Horizontal:
+            section -= 1
+        return super(Model, self).headerData(section, orientation, role)
+
+    def flags(self, index):
+        # since 2nd column is virtual, it doesn't make sense for it to be Editable
+        # other columns can be Editable (default for QSqlTableModel)
+        if index.column() == 4:
+            return Qt.ItemIsSelectable | Qt.ItemIsEnabled
+        return Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable
+
+    def setData(self, index, data, role):
+        # similar to data.
+        # we need to be careful when setting data (after edit)
+        # if column is after 2, it is actually the column before that
+        if index.column() > 4:
+            index = self.index(index.row(), index.column() - 1)
+        return super(Model, self).setData(index, data, role)
 if __name__ == '__main__':
     try:
         app = QApplication(sys.argv)
