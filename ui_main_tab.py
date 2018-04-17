@@ -107,7 +107,16 @@ class Model(QSqlTableModel):
             # we take the first two columns, get the data, turn it to integer and sum them
             # [0] at the end is necessary because pyqt returns value and a bool
             # http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qvariant.html#toInt
-            return self.data(self.index(index.row(),0)) - self.data(self.index(index.row(),0))
+            date2 = self.data(self.index(index.row(),3))
+            date1 = self.data(self.index(index.row(),2))
+            #premiere facon sans variable
+            date2B = datetime.strptime(self.data(self.index(index.row(),3)), "%Y-%m-%d %H:%M")
+            #deuzieme facon avec variable(plus lisible)
+            date1B = datetime.strptime(date1, "%Y-%m-%d %H:%M")
+            return str(date2B - date1B)
+
+            #return datetime.strptime(date2, "%Y-%m-%d %H:%M")
+            #return self.data(self.index(index.row(),3)) + self.data(self.index(index.row(),2))
             #return  sum(self.data(self.index(index.row(), i)).toInt()[0] for i in range(2))
         if index.column() > 4:
             # if we are past 2nd column, we need to shift it to left by one
