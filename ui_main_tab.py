@@ -9,6 +9,7 @@ import time
 import os
 
 import TabView
+import TabView2
 
 from DB_manager import tableModelQtsqlTry
 from DBessai import *
@@ -32,6 +33,9 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.model.setHeaderData(3, Qt.Horizontal, "datetime2")
         self.model.setHeaderData(4, Qt.Horizontal, "Calcul")
         self.tableView.setModel(self.model)
+        #appel de class pour qdialogu2
+        self.enter_new_AC.clicked.connect(self.afficher_classe2)
+        self.dialog = Dialogu2(self)
 
     def setdata(self):
         query = QSqlQuery()
@@ -56,36 +60,36 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
             return
 
     def get_date_diff(self):
-        quer = QSqlTableModel(self.model)
-        quer.setTable("Contact")
-        quer.select()
+        pass
+        # quer = QSqlTableModel(self.model)
+        # quer.setTable("Contact")
+        # quer.select()
+        #
+        # i = 0
+        # while i < quer.rowCount():
+        #     time1 = quer.record(i).value("datetime1")
+        #     time2 = quer.record(i).value("datetime2")
+        #     i += 1
+        #     print(type(time1))
+        #     diff = datetime.strptime(time2, "%Y-%m-%d %H:%M") - datetime.strptime(time1, "%Y-%m-%d %H:%M")
+        #     print(diff)
 
-        i = 0
-        while i < quer.rowCount():
-            time1 = quer.record(i).value("datetime1")
-            time2 = quer.record(i).value("datetime2")
-            i += 1
-            print(type(time1))
-            diff = datetime.strptime(time2, "%Y-%m-%d %H:%M") - datetime.strptime(time1, "%Y-%m-%d %H:%M")
-            print(diff)
+    def afficher_classe2(self):
+        self.dialog.show()
 
-
-
-
-
-                #print(diff)
 
     @pyqtSlot()
     def on_calculer_clicked(self):
         str(self.get_date_diff)
 
     @pyqtSlot()
-    def on_pushButton_4_clicked(self):
+    def on_insert_data_clicked(self):
         self.setdata()
 
     @pyqtSlot()
     def on_Effacer_clicked(self):
         self.remove_row()
+
 
 class Model(QSqlTableModel):
     def __init__(self, parent=None):
@@ -102,13 +106,14 @@ class Model(QSqlTableModel):
 
     def data(self, index, role=Qt.DisplayRole):
         if role == Qt.DisplayRole and index.column() == 4:
-            # 2nd column is our virtual column.
+            ''''# 2nd column is our virtual column.
             # if we are there, we need to calculate and return the value
             # we take the first two columns, get the data, turn it to integer and sum them
             # [0] at the end is necessary because pyqt returns value and a bool
-            # http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qvariant.html#toInt
+            # http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qvariant.html#toInt'''
             date2 = self.data(self.index(index.row(),3))
             date1 = self.data(self.index(index.row(),2))
+
             #premiere facon sans variable
             date2B = datetime.strptime(self.data(self.index(index.row(),3)), "%Y-%m-%d %H:%M")
             #deuzieme facon avec variable(plus lisible)
@@ -147,6 +152,18 @@ class Model(QSqlTableModel):
         if index.column() > 4:
             index = self.index(index.row(), index.column() - 1)
         return super(Model, self).setData(index, data, role)
+
+#Fenetre modal
+
+
+class Dialogu2(QDialog,TabView2.Ui_insertDialogu):
+    def __init__(self,parent = None):
+        super(Dialogu2,self).__init__(parent)
+        self.setupUi(self)
+
+
+
+
 if __name__ == '__main__':
     try:
         app = QApplication(sys.argv)
