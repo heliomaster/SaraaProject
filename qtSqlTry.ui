@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>830</width>
-    <height>462</height>
+    <width>817</width>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,6 +32,38 @@
      <height>24</height>
     </rect>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="dateTime">
+    <datetime>
+     <hour>20</hour>
+     <minute>0</minute>
+     <second>0</second>
+     <year>1999</year>
+     <month>12</month>
+     <day>31</day>
+    </datetime>
+   </property>
+   <property name="date">
+    <date>
+     <year>1999</year>
+     <month>12</month>
+     <day>31</day>
+    </date>
+   </property>
+   <property name="currentSection">
+    <enum>QDateTimeEdit::YearSection</enum>
+   </property>
+   <property name="displayFormat">
+    <string notr="true">dd-MM-yyyy HH:mm</string>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
+   <property name="currentSectionIndex">
+    <number>2</number>
+   </property>
    <property name="timeSpec">
     <enum>Qt::UTC</enum>
    </property>
@@ -45,12 +77,34 @@
      <height>24</height>
     </rect>
    </property>
+   <property name="wrapping">
+    <bool>true</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="dateTime">
+    <datetime>
+     <hour>2</hour>
+     <minute>0</minute>
+     <second>0</second>
+     <year>2000</year>
+     <month>1</month>
+     <day>1</day>
+    </datetime>
+   </property>
+   <property name="displayFormat">
+    <string notr="true">dd-MM-yyyy HH:mm</string>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QSplitter" name="splitter">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>140</y>
+     <y>200</y>
      <width>751</width>
      <height>281</height>
     </rect>
@@ -59,9 +113,27 @@
     <enum>Qt::Vertical</enum>
    </property>
    <widget class="QTableView" name="tableView1">
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="alternatingRowColors">
+     <bool>true</bool>
+    </property>
+    <property name="textElideMode">
+     <enum>Qt::ElideLeft</enum>
+    </property>
     <property name="sortingEnabled">
      <bool>true</bool>
     </property>
+    <attribute name="horizontalHeaderVisible">
+     <bool>true</bool>
+    </attribute>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderStretchLastSection">
+     <bool>true</bool>
+    </attribute>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -104,6 +176,74 @@
      </item>
     </layout>
    </widget>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>490</y>
+     <width>171</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>TOTAL :</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="total_le"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_immat">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>150</y>
+     <width>113</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_ac_type">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>150</y>
+     <width>113</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_puisance">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>150</y>
+     <width>113</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QSplitter" name="splitter_2">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>30</y>
+     <width>308</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <widget class="QDateEdit" name="dateEdit"/>
+   <widget class="QComboBox" name="comboBox"/>
+   <widget class="QLineEdit" name="lineEdit"/>
   </widget>
  </widget>
  <resources/>

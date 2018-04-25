@@ -2,7 +2,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSql import *
-from datetime import datetime
+from datetime import datetime,timedelta
 
 import sys
 import time
@@ -60,19 +60,20 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
             return
 
     def get_date_diff(self):
-        pass
-        # quer = QSqlTableModel(self.model)
-        # quer.setTable("Contact")
-        # quer.select()
-        #
-        # i = 0
-        # while i < quer.rowCount():
-        #     time1 = quer.record(i).value("datetime1")
-        #     time2 = quer.record(i).value("datetime2")
-        #     i += 1
-        #     print(type(time1))
-        #     diff = datetime.strptime(time2, "%Y-%m-%d %H:%M") - datetime.strptime(time1, "%Y-%m-%d %H:%M")
-        #     print(diff)
+        query1 = QSqlQuery("SELECT datetime1,datetime2 FROM Contact1")
+        liste=[]
+        while query1.next():
+            date1 = query1.value(0)
+            date2 = query1.value(1)
+            essai = datetime.strptime(date2, "%d-%m-%Y %H:%M") - datetime.strptime(date1, "%d-%m-%Y %H:%M")
+            liste.append(essai)
+        total = sum(liste, timedelta())
+        return total
+
+    def hours_minutes(self):
+        td = self.get_date_diff()
+        resultat = td.days * 24 + td.seconds // 3600
+        return resultat
 
     def afficher_classe2(self):
         self.dialog.show()
@@ -85,6 +86,8 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
     @pyqtSlot()
     def on_insert_data_clicked(self):
         self.setdata()
+        self.lineEdit_heures_total.setText(str(self.hours_minutes()))
+
 
     @pyqtSlot()
     def on_Effacer_clicked(self):
