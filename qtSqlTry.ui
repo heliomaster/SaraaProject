@@ -27,7 +27,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>60</y>
+     <y>90</y>
      <width>194</width>
      <height>24</height>
     </rect>
@@ -37,7 +37,7 @@
    </property>
    <property name="dateTime">
     <datetime>
-     <hour>20</hour>
+     <hour>17</hour>
      <minute>0</minute>
      <second>0</second>
      <year>1999</year>
@@ -56,13 +56,13 @@
     <enum>QDateTimeEdit::YearSection</enum>
    </property>
    <property name="displayFormat">
-    <string notr="true">dd-MM-yyyy HH:mm</string>
+    <string notr="true">yyyy/MM/dd HH:mm</string>
    </property>
    <property name="calendarPopup">
     <bool>true</bool>
    </property>
    <property name="currentSectionIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <property name="timeSpec">
     <enum>Qt::UTC</enum>
@@ -72,7 +72,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>100</y>
+     <y>120</y>
      <width>194</width>
      <height>24</height>
     </rect>
@@ -94,7 +94,7 @@
     </datetime>
    </property>
    <property name="displayFormat">
-    <string notr="true">dd-MM-yyyy HH:mm</string>
+    <string notr="true">yyyy/MM/dd HH:mm</string>
    </property>
    <property name="calendarPopup">
     <bool>true</bool>
@@ -208,6 +208,9 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="placeholderText">
+    <string>immat</string>
+   </property>
   </widget>
   <widget class="QLineEdit" name="lineEdit_ac_type">
    <property name="geometry">
@@ -217,6 +220,9 @@
      <width>113</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="placeholderText">
+    <string>ac type</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="lineEdit_puisance">
@@ -228,20 +234,56 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="placeholderText">
+    <string>puissance</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_aircraft">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>60</y>
+     <width>141</width>
+     <height>21</height>
+    </rect>
+   </property>
   </widget>
   <widget class="QSplitter" name="splitter_2">
    <property name="geometry">
     <rect>
-     <x>270</x>
+     <x>210</x>
      <y>30</y>
-     <width>308</width>
+     <width>432</width>
      <height>26</height>
     </rect>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
-   <widget class="QDateEdit" name="dateEdit"/>
+   <widget class="QDateEdit" name="dateEdit">
+    <property name="time">
+     <time>
+      <hour>23</hour>
+      <minute>59</minute>
+      <second>0</second>
+     </time>
+    </property>
+    <property name="displayFormat">
+     <string>yyyy/MM/dd</string>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="dateEdit_2">
+    <property name="time">
+     <time>
+      <hour>23</hour>
+      <minute>59</minute>
+      <second>0</second>
+     </time>
+    </property>
+    <property name="displayFormat">
+     <string>yyyy/MM/dd</string>
+    </property>
+   </widget>
    <widget class="QComboBox" name="comboBox"/>
    <widget class="QLineEdit" name="lineEdit"/>
   </widget>

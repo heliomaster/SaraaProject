@@ -19,7 +19,7 @@ class LaBase():
 
         query = QSqlQuery()
         query.exec_('''create table Contact (id INTEGER PRIMARY KEY,pilot_1 TEXT, datetime1 TEXT, datetime2 TEXT,total TEXT)''')
-        query.exec_('''create table Contact1 (id INTEGER PRIMARY KEY,pilot_1 TEXT, datetime1 TEXT, datetime2 TEXT)''')
+        query.exec_('''create table Contact1 (id INTEGER PRIMARY KEY,pilot_1 TEXT, datetime1 TEXT, datetime2 TEXT, aircraft INTEGER )''')
         query.exec_('''create TABLE Aircraft(id INTEGER PRIMARY KEY , immatriculation TEXT , type_ac TEXT, puissance TEXT)''')
 
         # while query.next():
