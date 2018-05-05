@@ -10,6 +10,9 @@ import os
 
 import TabView
 import TabView2
+import Dialogu_3
+
+
 
 from DB_manager import tableModelQtsqlTry
 from DBessai import *
@@ -37,6 +40,12 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.enter_new_AC.clicked.connect(self.afficher_classe2)
         self.dialog = Dialogu2(self)
 
+        #appel de classe pour dialogu3
+        self.enter_new_pilot.clicked.connect(self.afficher_classe3)
+        self.dialogu3 = Dialogu_3(self)
+
+
+
     def setdata(self):
         query = QSqlQuery()
         query.prepare("INSERT INTO Contact (pilot_1,datetime1,datetime2,total)" "VALUES (?,?,?,?)")
@@ -46,6 +55,7 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         query.bindValue(3, str(self.get_date_diff()))
         query.exec_()
         self.model.select()
+
 
     def remove_row(self):
         index = self.tableView.currentIndex()
@@ -78,6 +88,9 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
     def afficher_classe2(self):
         self.dialog.show()
 
+    def afficher_classe3(self):
+        self.dialogu3.show()
+
 
     @pyqtSlot()
     def on_calculer_clicked(self):
@@ -92,6 +105,7 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
     @pyqtSlot()
     def on_Effacer_clicked(self):
         self.remove_row()
+
 
 
 class Model(QSqlTableModel):
@@ -160,9 +174,43 @@ class Model(QSqlTableModel):
 
 
 class Dialogu2(QDialog,TabView2.Ui_insertDialogu):
+    """Opens Dialogu box to insert New Aircraft in database"""
     def __init__(self,parent = None):
         super(Dialogu2,self).__init__(parent)
         self.setupUi(self)
+        self.buttonBox.clicked.connect(self.setdata_aircraft)
+        self.model = Model()
+
+    def setdata_aircraft(self):
+        query =QSqlQuery()
+        query.prepare("INSERT INTO Aircraft(immatriculation,type_ac,puissance)" "VALUES(?,?,?)")
+        query.bindValue(0,self.lineEdit.text())
+        query.bindValue(1,self.lineEdit_2.text())
+        query.bindValue(2,self.lineEdit_3.text())
+        query.exec_()
+        self.model.select()
+
+
+class Dialogu_3(QDialog,Dialogu_3.Ui_Dialog):
+    """Opens Dialogu box to insert new pilot in database"""
+    def __init__(self,parent= None):
+        super(Dialogu_3,self).__init__(parent)
+        self.setupUi(self)
+        self.buttonBox_Ok_pilot.clicked.connect(self.setdata_pilot)
+        self.model = Model()
+
+    def setdata_pilot(self):
+        query = QSqlQuery()
+        query.prepare("INSERT INTO Pilot(rank,first_name, last_name)" "VALUES (?,?,?)")
+        query.bindValue(0,self.comboBox_grade.currentText())
+        query.bindValue(1,self.lineEdit_2.text())
+        query.bindValue(2,self.lineEdit_3.text())
+        query.exec_()
+        self.model.select()
+
+
+
+
 
 
 

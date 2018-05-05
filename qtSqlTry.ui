@@ -37,7 +37,7 @@
    </property>
    <property name="dateTime">
     <datetime>
-     <hour>17</hour>
+     <hour>16</hour>
      <minute>0</minute>
      <second>0</second>
      <year>1999</year>
@@ -195,7 +195,11 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="total_le"/>
+     <widget class="QLabel" name="label_total">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -263,8 +267,8 @@
    <widget class="QDateEdit" name="dateEdit">
     <property name="time">
      <time>
-      <hour>23</hour>
-      <minute>59</minute>
+      <hour>0</hour>
+      <minute>0</minute>
       <second>0</second>
      </time>
     </property>
@@ -275,8 +279,8 @@
    <widget class="QDateEdit" name="dateEdit_2">
     <property name="time">
      <time>
-      <hour>23</hour>
-      <minute>59</minute>
+      <hour>0</hour>
+      <minute>0</minute>
       <second>0</second>
      </time>
     </property>
@@ -287,6 +291,17 @@
    <widget class="QComboBox" name="comboBox"/>
    <widget class="QLineEdit" name="lineEdit"/>
   </widget>
+  <zorder>lineEditPilote</zorder>
+  <zorder>dateTimeEdit_1</zorder>
+  <zorder>dateTimeEdit_2</zorder>
+  <zorder>splitter</zorder>
+  <zorder>layoutWidget</zorder>
+  <zorder>lineEdit_immat</zorder>
+  <zorder>lineEdit_ac_type</zorder>
+  <zorder>lineEdit_puisance</zorder>
+  <zorder>lineEdit_aircraft</zorder>
+  <zorder>splitter_2</zorder>
+  <zorder>label</zorder>
  </widget>
  <resources/>
  <connections/>

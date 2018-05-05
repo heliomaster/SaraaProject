@@ -18,9 +18,11 @@ class LaBase():
         self.db.open() ## Commande permettant d'accéder à la base de données
 
         query = QSqlQuery()
+        query.exec_('''PRAGMA foreign_key = ON''')
         query.exec_('''create table Contact (id INTEGER PRIMARY KEY,pilot_1 TEXT, datetime1 TEXT, datetime2 TEXT,total TEXT)''')
         query.exec_('''create table Contact1 (id INTEGER PRIMARY KEY,pilot_1 TEXT, datetime1 TEXT, datetime2 TEXT, aircraft INTEGER )''')
         query.exec_('''create TABLE Aircraft(id INTEGER PRIMARY KEY , immatriculation TEXT , type_ac TEXT, puissance TEXT)''')
+        query.exec_('''create TABLE Pilot (id INTEGER PRIMARY KEY,rank TEXT, first_name TEXT, last_name TEXT)''')
 
         # while query.next():
         #     ladiff = ('''SELECT strftime('%s',datetime2)-strftime('%s',datetime1)  FROM Contact''')

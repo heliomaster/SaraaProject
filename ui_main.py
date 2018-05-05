@@ -54,7 +54,7 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
         self.tableView1.setModel(self.model)
         self.tableView1.resizeColumnsToContents()
         self.tableView1.setColumnHidden(0,True)
-        self.total_le.setText(str(self.hours_minutes()))
+        self.label_total.setText(str(self.hours_minutes()))
 
         #travail sur combobox
 
@@ -70,6 +70,7 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
         self.model.select()
 
     def query_date_time(self):
+        liste =[]
         self.model.setTable("Contact1")
         combodate = self.dateEdit.text()
         combodate_2 = self.dateEdit_2.text()
@@ -79,33 +80,19 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
         print(combodate_2)
         #self.model.setFilter("datetime1 between'1997/12/31' and '1999/12/31' ")
         #self.model.setFilter("datetime1 = '1997/12/31 17:00'")
-        #filter = "datetime1 between '{}' AND '{}'".format(combodate,combodate_2)
-        #filter = "datetime1 >= '{}' AND datetime1 <= '{}'".format(combodate, combodate_2)
         filter = "cast(datetime1 as datetime)between cast('{}' as datetime) and cast('{}' as datetime)".format(combodate,combodate_2)
-        #filter = "datetime1 = '{}' ".format(combodate)
         print(filter)
         self.model.setFilter(filter)
-        #self.model.setFilter("datetime1 BETWEEN '{}' AND '{}'".format(combodate,combodate_2))
-        #self.model.setFilter("id BETWEEN '1' AND '4'")
-
         #self.model.setFilter("datetime1 LIKE '{} {}'".format(combodate, '%'))
         #self.model.setFilter("datetime1 LIKE '01-01-2000%'")
         #filter = "datetime1 LIKE '{}'".format(combodate)
         #print(filter)
         #self.model.setFilter("pilot_1 LIKE  ('marc') ")
-
         self.model.select()
-
-
-
-
-
-
-
-
-
-
-
+        for i in range(self.model.rowCount()):
+            date1 = self.model.record(i).value("datetime1")
+            date2 = self.model.record(i).value("datetime2")
+            print('values are: {} and {}'.format(date1,date2))
 
 
     def affiche(self):
@@ -142,7 +129,7 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
 
     @pyqtSlot()
     def on_calcul_temps_clicked(self):
-        self.total_le.setText(str(self.hours_minutes()))
+        self.label_total.setText(str(self.hours_minutes()))
 
     @pyqtSlot()
     def on_Calcul_clicked(self):
@@ -152,7 +139,7 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
     @pyqtSlot()
     def on_pushButton_clicked(self):
         self.setdata()
-        self.total_le.setText(str(self.hours_minutes()))
+        self.label_total.setText(str(self.hours_minutes()))
         # self.insertion()
         # # self.pushButton.clicked.connect(self.insertion)
         # self.pushButton.clicked.connect(self.affiche)
