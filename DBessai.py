@@ -10,9 +10,7 @@ class LaBase():
     def __init__(self):
         #super(LaBase,self).__init__()
         #Création de la basse de données
-        self.db = QSqlDatabase.addDatabase("QSQLITE") ## Nous indiquons ici le driver avec lequel nous souhaitons travailler.
-        ## Les driver permettent de définir avec quel type de bases de données nous allons travailler.
-        ## Notez qu'il en existe un grand nombre et qu'il vous est même possible d'en personnaliser. Mais ceci sort du contexte actuel.
+        self.db = QSqlDatabase.addDatabase("QSQLITE")
         self.db.setDatabaseName('pilote1')  ## Nous nommons ici notre base de données.
 
         self.db.open() ## Commande permettant d'accéder à la base de données
@@ -23,6 +21,8 @@ class LaBase():
         query.exec_('''create table Contact1 (id INTEGER PRIMARY KEY,pilot_1 TEXT, datetime1 TEXT, datetime2 TEXT, aircraft INTEGER )''')
         query.exec_('''create TABLE Aircraft(id INTEGER PRIMARY KEY , immatriculation TEXT , type_ac TEXT, puissance TEXT)''')
         query.exec_('''create TABLE Pilot (id INTEGER PRIMARY KEY,rank TEXT, first_name TEXT, last_name TEXT)''')
+        query.exec_('''CREATE TABLE Mission(id INTEGER PRIMARY KEY,cdb TEXT, copi TEXT, pax1 TEXT, pax2 TEXT,
+                        datetime1 TEXT,datetime2 TEXT,aircraft TEXT,total TEXT,atterissage INTEGER ,mission TEXT,observations TEXT)''')
 
         # while query.next():
         #     ladiff = ('''SELECT strftime('%s',datetime2)-strftime('%s',datetime1)  FROM Contact''')

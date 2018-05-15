@@ -3,6 +3,9 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSql import *
 from datetime import datetime,timedelta
+from PyQt5 import QtWebEngineCore,QtWebEngineWidgets
+from PyQt5 import QtWebEngineCore
+from PyQt5 import QtPrintSupport
 
 import sys
 import time
@@ -11,6 +14,7 @@ import os
 import TabView
 import TabView2
 import Dialogu_3
+
 
 
 
@@ -40,11 +44,49 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.enter_new_AC.clicked.connect(self.afficher_classe2)
         self.dialog = Dialogu2(self)
 
-        #appel de classe pour dialogu3
+        # appel de classe pour dialogu3
         self.enter_new_pilot.clicked.connect(self.afficher_classe3)
         self.dialogu3 = Dialogu_3(self)
 
+    def my_printer(self):
+        with open('document.html', 'r') as file:
+            content = file.read()
+            print(content)
+            print(type(content))
+        name = "marc morgand"
+        #self.textEdit.setText("<address> le puit morgand <de la motte des bois<br> 18000 BOURGES</address><div>esssaii </div> <br><b>sdsfqslkjqslkdjqd qsdqksjd</b><br> {}".format(self.dateEdit.text()))
+        self.doc = QTextDocument()
+        self.doc.setDefaultStyleSheet("body{color : red}")
+        #self.doc.setHtml("<body><p> TRY 123 {} </p></body>".format(name))
+        self.doc.setHtml("{} ".format(content).format(name))
 
+        self.textEdit.setDocument(self.doc)
+        self.printer = QtPrintSupport.QPrinter()
+        self.printer.setPageSize(QtPrintSupport.QPrinter.A4)
+        self.printer.setOutputFormat(QtPrintSupport.QPrinter.NativeFormat)
+        #self.printer.setOutputFileName('pdffile')
+        dialog = QtPrintSupport.QPrintDialog(self.printer)
+        if dialog.exec_():
+
+            self.doc.print_(self.printer)
+
+        #Filling combox pilot
+
+        query_pilot = QSqlQuery("SELECT last_name FROM Pilot")
+        liste = []
+        while query_pilot.next():
+            pilot1 = query_pilot.value(0)
+            liste.append(pilot1)
+        self.comboBox_pilot1.addItems(liste)
+        self.comboBox_pilot2.addItems(liste)
+
+        # filling combobox AVEC TABLE VIEW
+        # self.query_pilot.setQuery()
+        # self.query_pilot.setHeaderData(0,Qt.Horizontal,"id")
+        # self.query_pilot.setHeaderData(0,Qt.Horizontal,"PILOTE COMMANDANT DE BORD")
+        # view = QTableView()
+        # self.comboBox_pilot1.setModel(self.query_pilot)
+        # self.comboBox_pilot1.setView(view)
 
     def setdata(self):
         query = QSqlQuery()
@@ -92,6 +134,29 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.dialogu3.show()
 
 
+    def text_view(self):
+       self.my_printer()
+
+
+        # filename = QFileDialog.getSaveFileName(self, 'Save File', os.getenv('HOME'))
+        # try:
+        #     with open(filename[0], 'w') as f:
+        #         #my_text = self.doc.tex
+        #         my_text = self.textEdit.setText(self.doc)
+        #         f.write(my_text)
+        # except IOError as e:
+        #     msg_bx = QMessageBox()
+        #     #msg_bx.critical(self.parent(), "il y a eu un probleme, recommencer!")
+        #     msg_bx.setText("il y a eu un probleme de type {}, recommencer" .format(e))
+        #     msg_bx.exec()
+
+
+
+
+    @pyqtSlot()
+    def on_pushButton_imprimer_clicked(self):
+        self.text_view()
+
     @pyqtSlot()
     def on_calculer_clicked(self):
         str(self.get_date_diff)
@@ -105,6 +170,8 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
     @pyqtSlot()
     def on_Effacer_clicked(self):
         self.remove_row()
+
+
 
 
 
@@ -207,6 +274,40 @@ class Dialogu_3(QDialog,Dialogu_3.Ui_Dialog):
         query.bindValue(2,self.lineEdit_3.text())
         query.exec_()
         self.model.select()
+
+
+# class htmlViewer(QtWebEngineWidgets):
+#     def __init__(self, parent=None):
+#         super(QtWebEngineWidgets).__init__(parent=None)
+#
+#         self.webview = QtWebEngineWidgets.QWebEngineView()
+#         self.template_text = open("htmlFile.html")
+#         self.templatate_txt = self.template_text.read()
+#         self.webview.setHtml(self.templatate_txt)
+
+#         self.printer= QPrinter(QPrinterInfo.defaultPrinter(), QPrinter.HighResolution)
+#
+#     def Essai_print(self):
+#         a = htmlViewer("http://www.google.fr")
+#         QWebEngineView.__init__(self)
+#         self.setZoomFactor(1)
+#         self.setUrl(QUrl(a))
+#         self.printer.setOutputFormat(QPrinter.PdfFormat)
+#         self.printer.setOrientation(QPrinter.Portrait)
+#         self.printer.setPaperSize(QPrinter.A4)
+#         self.printer.setFullPage(True)
+#         self.printer.setOutputFileName("printyou.pdf")
+#
+#         self.loadFinished.connect(self.execpreview)
+#
+#     def execpreview(self):
+#         self.print_(self.printer)
+
+
+
+
+
+
 
 
 

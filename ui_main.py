@@ -7,7 +7,11 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSql import *
 from datetime import datetime,timedelta
-from functools import reduce
+from PyQt5.QtPrintSupport import QPrintDialog, QPrinter
+
+from PyQt5 import QtWebEngineWidgets
+
+
 
 import sys
 import os
@@ -32,17 +36,17 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
         #QFileDialog.setFileMode(QFileDialog().AnyFile)
         self.model.setTable("Contact1")
 
-        # # travail sur relation model
-        # aircraftType = self.model.fieldIndex('aircraft')
-        # self.model.setRelation(aircraftType,QSqlRelation("Aircraft","id","immatriculation"))
-        # #self.tableView1.setItemDelegate(QSqlRelationalDelegate(self.tableView1))
-        # relModel = self.model.relationModel(aircraftType)
-        # self.comboBox.setModel(relModel)
-        # self.comboBox.setModelColumn(relModel.fieldIndex('immatriculation'))
-        # mapper = QDataWidgetMapper()
-        # mapper.setModel(self.model)
-        # mapper.setItemDelegate(QSqlRelationalDelegate())
-        # mapper.addMapping(self.comboBox,aircraftType)
+        # travail sur relation model
+        aircraftType = self.model.fieldIndex('aircraft')
+        self.model.setRelation(aircraftType,QSqlRelation("Aircraft","id","immatriculation"))
+        #self.tableView1.setItemDelegate(QSqlRelationalDelegate(self.tableView1))
+        relModel = self.model.relationModel(aircraftType)
+        self.comboBox.setModel(relModel)
+        self.comboBox.setModelColumn(relModel.fieldIndex('immatriculation'))
+        mapper = QDataWidgetMapper()
+        mapper.setModel(self.model)
+        mapper.setItemDelegate(QSqlRelationalDelegate())
+        mapper.addMapping(self.comboBox,aircraftType)
 
         self.model.select()
         self.model.setHeaderData(1, Qt.Horizontal, u"pilot_1")
@@ -56,7 +60,51 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
         self.tableView1.setColumnHidden(0,True)
         self.label_total.setText(str(self.hours_minutes()))
 
-        #travail sur combobox
+        # #travail sur PDF
+    # def print(self):
+    #     dialogu = QtPrintSupport.QPrintDialog()
+    #     if dialogu.exec_() == QDialog.Accepted:
+    #         self.handlepaintrequest(dialogu.printer())
+    # def handlepaintrequest(self,printer):
+    #     html = """<!DOCTYPE html>
+    #     <html>
+    #     <head> ESSAI <head>
+    #     <body>smdlqsdmlsdkmlsdk<body>
+    #     <html>"""
+    #     web_view = QtWebEngineWidgets.QWebEngineView()
+    #     web_view.setHtml(html)
+    #     web_view.print_(printer)
+    def print(self):
+        name = (self.dateEdit.text())
+        date = QDate.currentDate().toString()
+        html = ("""
+                < html >
+                < body >
+                Hello
+        world!
+        <p>name is {}</p>
+        <p> and the date is {}
+        </body>
+            < / html >
+                """).format(name, date)
+
+
+        # create a QPrinter object for the printer the user later selects
+        myPrinter = QPrinter()
+
+        # let user select and configure a printer, saved in the object created above
+        myDialog = QPrintDialog(myPrinter, self)
+
+        # execute the print if the user clicked "Print"
+        if myDialog.exec_():
+        # create a QTextDocument in memory to hold our HTML
+            myDocument = QTextDocument()
+
+        # load the html into the document
+        myDocument.setHtml(html)
+
+        # send the html to the physical printer
+        myDocument.print_(myPrinter)
 
 
     def setdata(self):
@@ -126,7 +174,9 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
             self.model.submitAll()
             return
 
-
+    @pyqtSlot()
+    def on_pushButton_print_clicked(self):
+        self.print()
     @pyqtSlot()
     def on_calcul_temps_clicked(self):
         self.label_total.setText(str(self.hours_minutes()))
