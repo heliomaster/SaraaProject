@@ -30,16 +30,26 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.setupUi(self)
         # appel de la classe du module dbessai
         self.LaBase = LaBase()
+        # setting MainDialogu to Model class => Override of current class(Class now qsqlrelationalmodel
         self.model = Model()
-        self.model.setTable("Contact")
+        self.model.setTable("Mission")
         self.model.setEditStrategy(QSqlTableModel.OnRowChange)
         self.model.select()
+
+
         self.model.setHeaderData(0, Qt.Horizontal, "ID")
-        self.model.setHeaderData(1, Qt.Horizontal, "pilot_1")
-        self.model.setHeaderData(2, Qt.Horizontal, "datetime1")
-        self.model.setHeaderData(3, Qt.Horizontal, "datetime2")
-        self.model.setHeaderData(4, Qt.Horizontal, "Calcul")
+        self.model.setHeaderData(1, Qt.Horizontal, "CDB")
+        self.model.setHeaderData(2, Qt.Horizontal, "Copi")
+        self.model.setHeaderData(3, Qt.Horizontal, "Avion")
+        self.model.setHeaderData(4, Qt.Horizontal, "pax1")
+        self.model.setHeaderData(5, Qt.Horizontal, "pax2")
+        self.model.setHeaderData(6, Qt.Horizontal, "Mission")
+        self.model.setHeaderData(7, Qt.Horizontal, "Observations")
+        self.model.setHeaderData(8, Qt.Horizontal, "datetime1")
+        self.model.setHeaderData(9, Qt.Horizontal, "datetime2")
+        self.model.setHeaderData(10, Qt.Horizontal, "total")
         self.tableView.setModel(self.model)
+
         #appel de class pour qdialogu2
         self.enter_new_AC.clicked.connect(self.afficher_classe2)
         self.dialog = Dialogu2(self)
@@ -48,27 +58,7 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.enter_new_pilot.clicked.connect(self.afficher_classe3)
         self.dialogu3 = Dialogu_3(self)
 
-    def my_printer(self):
-        with open('document.html', 'r') as file:
-            content = file.read()
-            print(content)
-            print(type(content))
-        name = "marc morgand"
-        #self.textEdit.setText("<address> le puit morgand <de la motte des bois<br> 18000 BOURGES</address><div>esssaii </div> <br><b>sdsfqslkjqslkdjqd qsdqksjd</b><br> {}".format(self.dateEdit.text()))
-        self.doc = QTextDocument()
-        self.doc.setDefaultStyleSheet("body{color : red}")
-        #self.doc.setHtml("<body><p> TRY 123 {} </p></body>".format(name))
-        self.doc.setHtml("{} ".format(content).format(name))
 
-        self.textEdit.setDocument(self.doc)
-        self.printer = QtPrintSupport.QPrinter()
-        self.printer.setPageSize(QtPrintSupport.QPrinter.A4)
-        self.printer.setOutputFormat(QtPrintSupport.QPrinter.NativeFormat)
-        #self.printer.setOutputFileName('pdffile')
-        dialog = QtPrintSupport.QPrintDialog(self.printer)
-        if dialog.exec_():
-
-            self.doc.print_(self.printer)
 
         #Filling combox pilot
 
@@ -87,6 +77,8 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         # view = QTableView()
         # self.comboBox_pilot1.setModel(self.query_pilot)
         # self.comboBox_pilot1.setView(view)
+
+
 
     def setdata(self):
         query = QSqlQuery()
@@ -172,15 +164,36 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.remove_row()
 
 
+    def my_printer(self):
+        with open('document.html', 'r') as file:
+            content = file.read()
+            print(content)
+            print(type(content))
+        name = "marc morgand"
+        # self.textEdit.setText("<address> le puit morgand <de la motte des bois<br> 18000 BOURGES</address><div>esssaii </div> <br><b>sdsfqslkjqslkdjqd qsdqksjd</b><br> {}".format(self.dateEdit.text()))
+        self.doc = QTextDocument()
+        self.doc.setDefaultStyleSheet("body{color : red}")
+        # self.doc.setHtml("<body><p> TRY 123 {} </p></body>".format(name))
+        self.doc.setHtml("{} ".format(content).format(name))
+
+        self.textEdit.setDocument(self.doc)
+        self.printer = QtPrintSupport.QPrinter()
+        self.printer.setPageSize(QtPrintSupport.QPrinter.A4)
+        self.printer.setOutputFormat(QtPrintSupport.QPrinter.NativeFormat)
+        # self.printer.setOutputFileName('pdffile')
+        dialog = QtPrintSupport.QPrintDialog(self.printer)
+        if dialog.exec_():
+            self.doc.print_(self.printer)
 
 
 
-class Model(QSqlTableModel):
+class Model(QSqlRelationalTableModel):
+    """Virtual column overiding base class datetime 1 and 2 substraction"""
     def __init__(self, parent=None):
         super(Model, self).__init__(parent)
         self.setEditStrategy(QSqlTableModel.OnFieldChange)
 
-        self.setTable("Contact")
+        self.setTable("Mission")
         self.select()
 
     def columnCount(self, parent=QModelIndex()):

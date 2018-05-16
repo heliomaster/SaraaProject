@@ -21,8 +21,8 @@ class LaBase():
         query.exec_('''create table Contact1 (id INTEGER PRIMARY KEY,pilot_1 TEXT, datetime1 TEXT, datetime2 TEXT, aircraft INTEGER )''')
         query.exec_('''create TABLE Aircraft(id INTEGER PRIMARY KEY , immatriculation TEXT , type_ac TEXT, puissance TEXT)''')
         query.exec_('''create TABLE Pilot (id INTEGER PRIMARY KEY,rank TEXT, first_name TEXT, last_name TEXT)''')
-        query.exec_('''CREATE TABLE Mission(id INTEGER PRIMARY KEY,cdb TEXT, copi TEXT, pax1 TEXT, pax2 TEXT,
-                        datetime1 TEXT,datetime2 TEXT,aircraft TEXT,total TEXT,atterissage INTEGER ,mission TEXT,observations TEXT)''')
+        query.exec_('''CREATE TABLE Mission(id INTEGER PRIMARY KEY,cdb TEXT, copi TEXT,aircraft TEXT, pax1 TEXT, pax2 TEXT,
+                        datetime1 TEXT,datetime2 TEXT,mission TEXT,observations TEXT,total TEXT )''')
 
         # while query.next():
         #     ladiff = ('''SELECT strftime('%s',datetime2)-strftime('%s',datetime1)  FROM Contact''')
