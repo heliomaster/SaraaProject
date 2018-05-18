@@ -50,20 +50,20 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         # and that the view should present the last_name's name field to the user. The second call does something similar
         # with column 2'''
         #
-        # self.model.setRelation(1, QSqlRelation("Pilot", "id", 'last_name'))
-        # self.model.setRelation(2, QSqlRelation("Pilot", "id", 'last_name'))
-        # self.model.setRelation(3, QSqlRelation("Aircraft", "id", "immatriculation"))
-        #
-        # # Not necessary just to make reading clearer could use Int
-        # aircraft_type = self.model.fieldIndex("aircraft")
-        # # display custom combobox
-        # relmodel = self.model.relationModel(aircraft_type)
-        # self.comboBox_avion.setModel(relmodel)
-        # self.comboBox_avion.setModelColumn(relmodel.fieldIndex("immatriculation"))
-        # mapper = QDataWidgetMapper()
-        # mapper.setModel(self.model)
-        # mapper.setItemDelegate(QSqlRelationalDelegate(self.comboBox_avion))
-        # mapper.addMapping(self.comboBox_avion, aircraft_type)
+        self.model.setRelation(1, QSqlRelation("Pilot", "id", 'last_name'))
+        self.model.setRelation(2, QSqlRelation("Pilot", "id", 'last_name'))
+        self.model.setRelation(3, QSqlRelation("Aircraft", "id", "immatriculation"))
+
+        # Not necessary just to make reading clearer could use Int
+        aircraft_type = self.model.fieldIndex("aircraft")
+        # display custom combobox
+        relmodel = self.model.relationModel(aircraft_type)
+        self.comboBox_avion.setModel(relmodel)
+        self.comboBox_avion.setModelColumn(relmodel.fieldIndex("immatriculation"))
+        mapper = QDataWidgetMapper()
+        mapper.setModel(self.model)
+        mapper.setItemDelegate(QSqlRelationalDelegate(self.comboBox_avion))
+        mapper.addMapping(self.comboBox_avion, aircraft_type)
 
 
 
