@@ -17,7 +17,7 @@ import Dialogu_3
 
 from DB_manager import tableModelQtsqlTry
 from DBessai import *
-
+############################################################
 
 # To incorporate UI_view_SARAA inherit QDialog, and UI_view
 class MainDialog(QDialog, TabView.Ui_Dialog):
