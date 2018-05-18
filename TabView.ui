@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>816</width>
-    <height>498</height>
+    <width>842</width>
+    <height>560</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,7 +73,7 @@
           <string>INSERTION</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="7" column="0">
+          <item row="9" column="0">
            <widget class="QLineEdit" name="lineEdit_observations">
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -83,57 +83,8 @@
             </property>
            </widget>
           </item>
-          <item row="6" column="0">
-           <widget class="QLineEdit" name="lineEdit_mission">
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="placeholderText">
-             <string>Mission</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QComboBox" name="comboBox_pilot2"/>
-          </item>
           <item row="3" column="0">
-           <widget class="QLineEdit" name="lineEdit_pax1">
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="placeholderText">
-             <string>pax 1</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLineEdit" name="lineEdit_pax2">
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="placeholderText">
-             <string>pax 2</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QComboBox" name="comboBox_pilot1"/>
-          </item>
-          <item row="8" column="0">
            <widget class="QDateTimeEdit" name="dateTimeEdit">
-            <property name="displayFormat">
-             <string>yyyy-MM-dd HH:mm</string>
-            </property>
-            <property name="calendarPopup">
-             <bool>true</bool>
-            </property>
-            <property name="timeSpec">
-             <enum>Qt::UTC</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="0">
-           <widget class="QDateTimeEdit" name="dateTimeEdit_2">
             <property name="displayFormat">
              <string>yyyy-MM-dd HH:mm</string>
             </property>
@@ -147,6 +98,55 @@
           </item>
           <item row="2" column="0">
            <widget class="QComboBox" name="comboBox_avion"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QComboBox" name="comboBox_pilot2"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QComboBox" name="comboBox_pilot1"/>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLineEdit" name="lineEdit_pax2">
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="placeholderText">
+             <string>pax 2</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLineEdit" name="lineEdit_pax1">
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="placeholderText">
+             <string>pax 1</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLineEdit" name="lineEdit_mission">
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="placeholderText">
+             <string>Mission</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QDateTimeEdit" name="dateTimeEdit_2">
+            <property name="displayFormat">
+             <string notr="true">yyyy-MM-dd HH:mm</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+            <property name="timeSpec">
+             <enum>Qt::UTC</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -178,7 +178,7 @@
              <date>
               <year>2017</year>
               <month>12</month>
-              <day>29</day>
+              <day>26</day>
              </date>
             </property>
             <property name="maximumDateTime">
@@ -199,7 +199,7 @@
              </time>
             </property>
             <property name="displayFormat">
-             <string>yyyy/MM/dd</string>
+             <string>yyyy-MM-dd</string>
             </property>
             <property name="calendarPopup">
              <bool>true</bool>
@@ -218,7 +218,7 @@
              <enum>QAbstractSpinBox::UpDownArrows</enum>
             </property>
             <property name="displayFormat">
-             <string>yyyy/MM/dd</string>
+             <string>yyyy-MM-dd</string>
             </property>
             <property name="calendarPopup">
              <bool>true</bool>
@@ -486,8 +486,6 @@ p, li { white-space: pre-wrap; }
  <tabstops>
   <tabstop>lineEdit_pax1</tabstop>
   <tabstop>lineEdit_pax2</tabstop>
-  <tabstop>dateTimeEdit</tabstop>
-  <tabstop>dateTimeEdit_2</tabstop>
   <tabstop>insert_data</tabstop>
   <tabstop>Effacer</tabstop>
   <tabstop>calculer</tabstop>
