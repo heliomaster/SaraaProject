@@ -49,21 +49,34 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         #  The first call specifies that column 1 in table Mission is a foreign key that maps with field id of table Pilot
         # and that the view should present the last_name's name field to the user. The second call does something similar
         # with column 2'''
-        #
-        self.model.setRelation(1, QSqlRelation("Pilot", "id", 'last_name'))
-        self.model.setRelation(2, QSqlRelation("Pilot", "id", 'last_name'))
-        self.model.setRelation(3, QSqlRelation("Aircraft", "id", "immatriculation"))
 
-        # Not necessary just to make reading clearer could use Int
-        aircraft_type = self.model.fieldIndex("aircraft")
-        # display custom combobox
-        relmodel = self.model.relationModel(aircraft_type)
-        self.comboBox_avion.setModel(relmodel)
-        self.comboBox_avion.setModelColumn(relmodel.fieldIndex("immatriculation"))
+        # self.model.setRelation(1, QSqlRelation("Pilot", "id", 'last_name'))
+        # self.model.setRelation(2, QSqlRelation("Pilot", "id", 'last_name'))
+        # self.model.setRelation(3, QSqlRelation("Aircraft", "id", "immatriculation"))
+        #
+        # # Not necessary just to make reading clearer could use Int
+        # aircraft_type = self.model.fieldIndex("aircraft")
+        # # display custom combobox
+        # relmodel = self.model.relationModel(aircraft_type)
+        # self.comboBox_avion.setModel(relmodel)
+        # self.comboBox_avion.setModelColumn(relmodel.fieldIndex("immatriculation"))
+        # mapper = QDataWidgetMapper()
+        # mapper.setModel(self.model)
+        # mapper.setItemDelegate(QSqlRelationalDelegate(self.comboBox_avion))
+        # mapper.addMapping(self.comboBox_avion, aircraft_type)
+
+        # travail sur relation model
+        aircraftType = self.model.fieldIndex('aircraft')
+        self.model.setRelation(aircraftType,QSqlRelation("Aircraft","id","immatriculation"))
+        #self.tableView1.setItemDelegate(QSqlRelationalDelegate(self.tableView1))
+        relModel = self.model.relationModel(aircraftType)
+        self.comboBox_avion.setModel(relModel)
+        self.comboBox_avion.setModelColumn(relModel.fieldIndex('immatriculation'))
         mapper = QDataWidgetMapper()
         mapper.setModel(self.model)
-        mapper.setItemDelegate(QSqlRelationalDelegate(self.comboBox_avion))
-        mapper.addMapping(self.comboBox_avion, aircraft_type)
+        mapper.setItemDelegate(QSqlRelationalDelegate())
+        mapper.addMapping(self.comboBox_avion,aircraftType)
+        self.model.select()
 
 
 
@@ -98,7 +111,7 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
             "INSERT INTO Mission (cdb,copi,aircraft,datetime1,datetime2,pax1,pax2,mission,observations,total)" "VALUES (?,?,?,?,?,?,?,?,?,?)")
         query.bindValue(0, self.comboBox_pilot1.currentText())
         query.bindValue(1, self.comboBox_pilot2.currentText())
-        query.bindValue(2, self.comboBox_avion.currentText())
+        query.bindValue(2, self.comboBox_avion.currentIndex())
         query.bindValue(3, self.dateTimeEdit.text())
         query.bindValue(4, self.dateTimeEdit_2.text())
         query.bindValue(5, self.lineEdit_pax1.text())
