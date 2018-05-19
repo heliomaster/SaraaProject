@@ -203,17 +203,24 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
     def create_limit_table(self):
         """Setting Table for Limits"""
 
-        tableviewmodel = QSqlQueryModel()
-        tableviewmodel.setQuery("SELECT * FROM Limites")
-        tableviewmodel.setHeaderData(0,Qt.Horizontal,"PILOTES")
-        tableviewmodel.setHeaderData(1, Qt.Horizontal, "CEMPN")
-        tableviewmodel.setHeaderData(2, Qt.Horizontal, "VSA")
-        tableviewmodel.setHeaderData(3, Qt.Horizontal, "LICENSE")
-
-        self.tableView_limites.setModel(tableviewmodel)
-        self.tableView_limites.setSortingEnabled(True)
-        self.tableView_limites.resizeColumnsToContents()
-        self.tableView_limites.setAlternatingRowColors(True)
+        model = QSqlRelationalTableModel()
+        model.setTable("Limites")
+        model.select()
+        self.tableView_limites.setModel(model)
+        #
+        # tableviewmodel = QSqlQueryModel()
+        #
+        #
+        # tableviewmodel.setQuery("SELECT * FROM Limites")
+        # tableviewmodel.setHeaderData(0,Qt.Horizontal,"PILOTES")
+        # tableviewmodel.setHeaderData(1, Qt.Horizontal, "CEMPN")
+        # tableviewmodel.setHeaderData(2, Qt.Horizontal, "VSA")
+        # tableviewmodel.setHeaderData(3, Qt.Horizontal, "LICENSE")
+        #
+        # self.tableView_limites.setModel(tableviewmodel)
+        # self.tableView_limites.setSortingEnabled(True)
+        # self.tableView_limites.resizeColumnsToContents()
+        # self.tableView_limites.setAlternatingRowColors(True)
 
 
 
