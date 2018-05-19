@@ -44,6 +44,9 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.model.setHeaderData(9, Qt.Horizontal, "Observations")
         self.model.setHeaderData(10, Qt.Horizontal, "total")
         self.tableView.setModel(self.model)
+        self.tableView.setSortingEnabled(True)
+        self.create_limit_table()
+
         #
         # '''Relationaltablemodel: The setRelation() function calls establish a relationship between two tables.
         #  The first call specifies that column 1 in table Mission is a foreign key that maps with field id of table Pilot
@@ -196,6 +199,28 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         dialog = QtPrintSupport.QPrintDialog(self.printer)
         if dialog.exec_():
             self.doc.print_(self.printer)
+
+    def create_limit_table(self):
+        """Setting Table for Limits"""
+
+        tableviewmodel = QSqlQueryModel()
+        tableviewmodel.setQuery("SELECT * FROM Limites")
+        tableviewmodel.setHeaderData(0,Qt.Horizontal,"PILOTES")
+        tableviewmodel.setHeaderData(1, Qt.Horizontal, "CEMPN")
+        tableviewmodel.setHeaderData(2, Qt.Horizontal, "VSA")
+        tableviewmodel.setHeaderData(3, Qt.Horizontal, "LICENSE")
+
+        self.tableView_limites.setModel(tableviewmodel)
+        self.tableView_limites.setSortingEnabled(True)
+        self.tableView_limites.resizeColumnsToContents()
+        self.tableView_limites.setAlternatingRowColors(True)
+
+
+
+
+
+
+
 
 
 class Model(QSqlRelationalTableModel):
