@@ -45,7 +45,12 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.model.setHeaderData(10, Qt.Horizontal, "total")
         self.tableView.setModel(self.model)
         self.tableView.setSortingEnabled(True)
-        self.create_limit_table()
+       # self.create_limit_table()
+
+        self.mydata = Moncuq()
+        self.tableView_limites.setModel(self.mydata)
+
+
 
         #
         # '''Relationaltablemodel: The setRelation() function calls establish a relationship between two tables.
@@ -200,14 +205,28 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         if dialog.exec_():
             self.doc.print_(self.printer)
 
-    def create_limit_table(self):
-        """Setting Table for Limits"""
+class Moncuq(QSqlRelationalTableModel,TabView.Ui_Dialog):
 
-        model = QSqlRelationalTableModel()
-        model.setTable("Limites")
-        model.select()
-        self.tableView_limites.setModel(model)
-        #
+    def __init__(self, parent=None):
+        super(Moncuq, self).__init__(parent)
+        self.setEditStrategy(QSqlRelationalTableModel.OnRowChange)
+        self.setTable("Limites")
+        self.select()
+
+
+
+        # def create_limit_table(self):
+        #     """Setting Table for Limits"""
+
+        # model = QSqlRelationalTableModel()
+        # self.setTable("Limites")
+        # self.select()
+        # self.tableView_limites.setModel()
+
+
+
+
+
         # tableviewmodel = QSqlQueryModel()
         #
         #
@@ -223,6 +242,17 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         # self.tableView_limites.setAlternatingRowColors(True)
 
 
+
+
+# class SubClassTableModel(QSqlRelationalTableModel):
+#     def __init__(self,parent=None):
+#         super(SubClassTableModel).__init__(parent)
+#
+#     def data(self, QModelIndex,role=Qt.DisplayRole):
+#         if role == Qt.BackgroundColorRole:
+#
+#             self.data(self.index(Qt.DisplayRole))
+#             return QColor(Qt.red)
 
 
 
