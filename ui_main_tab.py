@@ -45,10 +45,22 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.model.setHeaderData(10, Qt.Horizontal, "total")
         self.tableView.setModel(self.model)
         self.tableView.setSortingEnabled(True)
-       # self.create_limit_table()
 
+        #call to moncuq class with edit resize columns
         self.mydata = Moncuq()
         self.tableView_limites.setModel(self.mydata)
+        self.tableView_limites.resizeColumnsToContents()
+        self.tableView_limites.setColumnHidden(0,True)
+
+
+
+
+
+
+
+
+        #self.pushButton_lim_inserer.clicked.connect(self.setdata_limites_table)
+        #self.pushButton_lim_inserer.clicked.connect(self.mydata.select)
 
 
 
@@ -130,6 +142,49 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         query.exec_()
         self.model.select()
 
+    def setdata_limites_table(self):
+        query = QSqlQuery()
+        query.prepare("INSERT INTO Limites(pilot,cempn,vsa,license) " "VALUES  (?,?,?,?)")
+        query.bindValue(0, self.lineEdit_lim_pilot.text())
+        query.bindValue(1, self.dateEdit_lim_cempn.text())
+        query.bindValue(2, self.dateEdit_lim_vsa.text())
+        query.bindValue(3, self.dateEdit_lim_vsa.text())
+        query.exec_()
+        self.mydata.select()
+
+    @pyqtSlot()
+    def on_pushButton_lim_inserer_clicked(self):
+        self.setdata_limites_table()
+
+#######remove row   lim#########
+
+    def remove_row_lim(self):
+        index = self.tableView_limites.currentIndex()
+        deleteconf = QMessageBox.critical(self.parent(), "DELETE ROW", "REALLY DELETE", QMessageBox.Yes,
+                                          QMessageBox.No)
+        if deleteconf == QMessageBox.Yes:
+            self.mydata.removeRow(index.row())
+            self.mydata.submitAll()
+            self.mydata.select()
+            return
+        else:
+            return
+
+    @pyqtSlot()
+    def on_pushButton_lim_supprimer_clicked(self):
+        self.remove_row_lim()
+############################
+
+
+
+
+
+
+
+
+
+
+
     def remove_row(self):
         index = self.tableView.currentIndex()
         deleteconf = QMessageBox.critical(self.parent(), "DELETE ROW", "REALLY DELETE", QMessageBox.Yes,
@@ -163,6 +218,8 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
 
     def afficher_classe3(self):
         self.dialogu3.show()
+
+
 
     def text_view(self):
         self.my_printer()
@@ -209,13 +266,30 @@ class Moncuq(QSqlRelationalTableModel,TabView.Ui_Dialog):
 
     def __init__(self, parent=None):
         super(Moncuq, self).__init__(parent)
-        self.setEditStrategy(QSqlRelationalTableModel.OnRowChange)
+        self.setEditStrategy(QSqlRelationalTableModel.OnFieldChange)
         self.setTable("Limites")
         self.select()
 
+    def data(self, item, role):
+        if role == Qt.BackgroundRole:
+            if QSqlQueryModel.data(self, self.index(item.row(),1), Qt.DisplayRole):
+                return QBrush(Qt.yellow)
 
 
-        # def create_limit_table(self):
+        if role == Qt.DisplayRole:
+            if item.column()== 2:
+                return True if QSqlQueryModel.data(self, item, Qt.DisplayRole) == datetime.now() else "c'est ca"
+        return QSqlQueryModel.data(self,item, role)
+
+
+
+
+
+
+
+
+
+            # def create_limit_table(self):
         #     """Setting Table for Limits"""
 
         # model = QSqlRelationalTableModel()
