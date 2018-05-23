@@ -17,6 +17,8 @@ import Dialogu_3
 
 from DB_manager import tableModelQtsqlTry
 from DBessai import *
+
+
 ############################################################
 
 # To incorporate UI_view_SARAA inherit QDialog, and UI_view
@@ -31,7 +33,6 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.model.setTable("Mission")
         self.model.setEditStrategy(QSqlRelationalTableModel.OnRowChange)
         self.model.select()
-
         self.model.setHeaderData(0, Qt.Horizontal, "ID")
         self.model.setHeaderData(1, Qt.Horizontal, "CDB")
         self.model.setHeaderData(2, Qt.Horizontal, "Copi")
@@ -46,59 +47,31 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.tableView.setModel(self.model)
         self.tableView.setSortingEnabled(True)
 
-        #call to moncuq class with edit resize columns
+        # setting table in table
+        self.tableView_2.setModel(self.model)
+        self.tableView_2.setSortingEnabled(True)
+        self.tableView_2.resizeColumnsToContents()
+        self.tableView_2.setColumnHidden(0, True)
+
+        # call to moncuq class with edit resize columns
         self.mydata = Moncuq()
         self.tableView_limites.setModel(self.mydata)
         self.tableView_limites.resizeColumnsToContents()
-        self.tableView_limites.setColumnHidden(0,True)
+        self.tableView_limites.setColumnHidden(0, True)
+        self.tableView.selectAll()
 
-
-
-
-
-
-
-
-        #self.pushButton_lim_inserer.clicked.connect(self.setdata_limites_table)
-        #self.pushButton_lim_inserer.clicked.connect(self.mydata.select)
-
-
-
-        #
-        # '''Relationaltablemodel: The setRelation() function calls establish a relationship between two tables.
-        #  The first call specifies that column 1 in table Mission is a foreign key that maps with field id of table Pilot
-        # and that the view should present the last_name's name field to the user. The second call does something similar
-        # with column 2'''
-
-        # self.model.setRelation(1, QSqlRelation("Pilot", "id", 'last_name'))
-        # self.model.setRelation(2, QSqlRelation("Pilot", "id", 'last_name'))
-        # self.model.setRelation(3, QSqlRelation("Aircraft", "id", "immatriculation"))
-        #
-        # # Not necessary just to make reading clearer could use Int
-        # aircraft_type = self.model.fieldIndex("aircraft")
-        # # display custom combobox
-        # relmodel = self.model.relationModel(aircraft_type)
-        # self.comboBox_avion.setModel(relmodel)
-        # self.comboBox_avion.setModelColumn(relmodel.fieldIndex("immatriculation"))
-        # mapper = QDataWidgetMapper()
-        # mapper.setModel(self.model)
-        # mapper.setItemDelegate(QSqlRelationalDelegate(self.comboBox_avion))
-        # mapper.addMapping(self.comboBox_avion, aircraft_type)
-
-        # travail sur relation model
+        ###########  RELATION MODEL################
         aircraftType = self.model.fieldIndex('aircraft')
-        self.model.setRelation(aircraftType,QSqlRelation("Aircraft","id","immatriculation"))
-        #self.tableView1.setItemDelegate(QSqlRelationalDelegate(self.tableView1))
+        self.model.setRelation(aircraftType, QSqlRelation("Aircraft", "id", "immatriculation"))
+        # self.tableView1.setItemDelegate(QSqlRelationalDelegate(self.tableView1))
         relModel = self.model.relationModel(aircraftType)
         self.comboBox_avion.setModel(relModel)
         self.comboBox_avion.setModelColumn(relModel.fieldIndex('immatriculation'))
         mapper = QDataWidgetMapper()
         mapper.setModel(self.model)
         mapper.setItemDelegate(QSqlRelationalDelegate())
-        mapper.addMapping(self.comboBox_avion,aircraftType)
+        mapper.addMapping(self.comboBox_avion, aircraftType)
         self.model.select()
-
-
 
         # appel de class pour qdialogu2
         self.enter_new_AC.clicked.connect(self.afficher_classe2)
@@ -107,8 +80,9 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         # appel de classe pour dialogu3
         self.enter_new_pilot.clicked.connect(self.afficher_classe3)
         self.dialogu3 = Dialogu_3(self)
-        # Filling combox pilot
 
+        # Filling combox pilot
+        # todo: set relation sql
         query_pilot = QSqlQuery("SELECT last_name FROM Pilot")
         liste = []
         while query_pilot.next():
@@ -116,6 +90,7 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
             liste.append(pilot1)
         self.comboBox_pilot1.addItems(liste)
         self.comboBox_pilot2.addItems(liste)
+        #print(liste)
 
         # filling combobox AVEC TABLE VIEW
         # self.query_pilot.setQuery()
@@ -142,6 +117,11 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         query.exec_()
         self.model.select()
 
+    @pyqtSlot()
+    def on_insert_data_clicked(self):
+        self.setdata()
+        self.lineEdit_heures_total.setText(str(self.hours_minutes()))
+
     def setdata_limites_table(self):
         query = QSqlQuery()
         query.prepare("INSERT INTO Limites(pilot,cempn,vsa,license) " "VALUES  (?,?,?,?)")
@@ -156,7 +136,7 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
     def on_pushButton_lim_inserer_clicked(self):
         self.setdata_limites_table()
 
-#######remove row   lim#########
+    #######remove row   lim#########
 
     def remove_row_lim(self):
         index = self.tableView_limites.currentIndex()
@@ -173,19 +153,11 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
     @pyqtSlot()
     def on_pushButton_lim_supprimer_clicked(self):
         self.remove_row_lim()
-############################
 
-
-
-
-
-
-
-
-
-
+    ############################
 
     def remove_row(self):
+
         index = self.tableView.currentIndex()
         deleteconf = QMessageBox.critical(self.parent(), "DELETE ROW", "REALLY DELETE", QMessageBox.Yes,
                                           QMessageBox.No)
@@ -197,7 +169,16 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         else:
             return
 
+    @pyqtSlot()
+    def on_Effacer_clicked(self):
+        self.remove_row()
+
+    ##############################
+
+
+    ############### HOURS DATETIME DIFF#################
     def get_date_diff(self):
+        """select dates from database to display on tableView_3"""
         query1 = QSqlQuery("SELECT datetime1,datetime2 FROM Mission")
         liste = []
         while query1.next():
@@ -209,9 +190,16 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         return total
 
     def hours_minutes(self):
+        """conversion of time delta to hours"""
         td = self.get_date_diff()
         resultat = td.days * 24 + td.seconds // 3600
         return resultat
+
+    @pyqtSlot()
+    def on_calculer_clicked(self):
+        str(self.get_date_diff)
+
+    #########################################
 
     def afficher_classe2(self):
         self.dialog.show()
@@ -219,29 +207,9 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
     def afficher_classe3(self):
         self.dialogu3.show()
 
-
-
-    def text_view(self):
-        self.my_printer()
-
-    @pyqtSlot()
-    def on_pushButton_imprimer_clicked(self):
-        self.text_view()
-
-    @pyqtSlot()
-    def on_calculer_clicked(self):
-        str(self.get_date_diff)
-
-    @pyqtSlot()
-    def on_insert_data_clicked(self):
-        self.setdata()
-        self.lineEdit_heures_total.setText(str(self.hours_minutes()))
-
-    @pyqtSlot()
-    def on_Effacer_clicked(self):
-        self.remove_row()
-
+    ################### PRINTER ########################
     def my_printer(self):
+        """sets printer to PDF report for hours"""
         with open('document.html', 'r') as file:
             content = file.read()
             print(content)
@@ -262,44 +230,54 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         if dialog.exec_():
             self.doc.print_(self.printer)
 
-class Moncuq(QSqlRelationalTableModel,TabView.Ui_Dialog):
+    def text_view(self):
+        self.my_printer()
 
+    @pyqtSlot()
+    def on_pushButton_imprimer_clicked(self):
+        self.text_view()
+
+
+class Moncuq(QSqlRelationalTableModel, TabView.Ui_Dialog):
+    """Class to display Limites Table and color and implement method DATA to override
+    otherwise Model table would be selected"""
     def __init__(self, parent=None):
         super(Moncuq, self).__init__(parent)
         self.setEditStrategy(QSqlRelationalTableModel.OnFieldChange)
         self.setTable("Limites")
         self.select()
+        now = datetime.now().date()
+        print(now)
+        print(type(now))
 
     def data(self, item, role):
+
         if role == Qt.BackgroundRole:
-            if QSqlQueryModel.data(self, self.index(item.row(),1), Qt.DisplayRole):
-                return QBrush(Qt.yellow)
-
-
-        if role == Qt.DisplayRole:
-            if item.column()== 2:
-                return True if QSqlQueryModel.data(self, item, Qt.DisplayRole) == datetime.now() else "c'est ca"
-        return QSqlQueryModel.data(self,item, role)
+            if item.column() == 2:
+                return QBrush(Qt.red) if QSqlQueryModel.data(self, item, Qt.DisplayRole) == "2015-01-01" else False
+        return QSqlQueryModel.data(self, item, role)
 
 
 
+################# A CONVERVER EXEMPLE DISPLAY ROLE#############################
+    # def data(self, item, role):
+    #     if role == Qt.BackgroundRole:
+    #         if QSqlQueryModel.data(self, self.index(item.row(), 2), Qt.DisplayRole) == "Young":
+    #             return QBrush(Qt.yellow)
+    #     if role == Qt.DisplayRole:
+    #         if item.column() == 3:
+    #             return True if QSqlQueryModel.data(self, item, Qt.DisplayRole) == 1 else False
+    #     return QSqlQueryModel.data(self, item, role)
 
+###################################################################################
 
-
-
-
-
-            # def create_limit_table(self):
+        # def create_limit_table(self):
         #     """Setting Table for Limits"""
 
         # model = QSqlRelationalTableModel()
         # self.setTable("Limites")
         # self.select()
         # self.tableView_limites.setModel()
-
-
-
-
 
         # tableviewmodel = QSqlQueryModel()
         #
@@ -316,8 +294,6 @@ class Moncuq(QSqlRelationalTableModel,TabView.Ui_Dialog):
         # self.tableView_limites.setAlternatingRowColors(True)
 
 
-
-
 # class SubClassTableModel(QSqlRelationalTableModel):
 #     def __init__(self,parent=None):
 #         super(SubClassTableModel).__init__(parent)
@@ -327,12 +303,6 @@ class Moncuq(QSqlRelationalTableModel,TabView.Ui_Dialog):
 #
 #             self.data(self.index(Qt.DisplayRole))
 #             return QColor(Qt.red)
-
-
-
-
-
-
 
 class Model(QSqlRelationalTableModel):
     """Virtual column overiding base class datetime 1 and 2 substraction"""
@@ -399,7 +369,7 @@ class Model(QSqlRelationalTableModel):
         return super(Model, self).setData(index, data, role)
 
 
-# Fenetre modal
+############### Fenetres modal
 
 
 class Dialogu2(QDialog, TabView2.Ui_insertDialogu):

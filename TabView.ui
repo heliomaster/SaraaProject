@@ -30,7 +30,7 @@
      </property>
      <widget class="QWidget" name="Insertion">
       <attribute name="title">
-       <string>Insertion</string>
+       <string>INSERTION</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="3" column="0">
@@ -292,7 +292,7 @@
      </widget>
      <widget class="QWidget" name="Limites">
       <attribute name="title">
-       <string>Limites</string>
+       <string>LIMITES</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7">
        <item row="1" column="0">
@@ -318,6 +318,9 @@
             <property name="displayFormat">
              <string>yyyy-MM-dd</string>
             </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
             <property name="timeSpec">
              <enum>Qt::UTC</enum>
             </property>
@@ -327,6 +330,9 @@
            <widget class="QDateEdit" name="dateEdit_lim_cempn">
             <property name="displayFormat">
              <string>yyyy-MM-dd</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
             </property>
             <property name="timeSpec">
              <enum>Qt::UTC</enum>
@@ -352,6 +358,9 @@
             <property name="displayFormat">
              <string>yyyy-MM-dd</string>
             </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
             <property name="timeSpec">
              <enum>Qt::UTC</enum>
             </property>
@@ -361,6 +370,9 @@
            <widget class="QDateEdit" name="dateEdit_lim_license">
             <property name="displayFormat">
              <string>yyyy-MM-dd</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
             </property>
             <property name="timeSpec">
              <enum>Qt::UTC</enum>
@@ -383,7 +395,10 @@
           <item row="7" column="3">
            <widget class="QDateEdit" name="dateEdit_3">
             <property name="displayFormat">
-             <string notr="true">yyyy/MM/dd</string>
+             <string notr="true">yyyy-MM-dd</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -415,6 +430,9 @@
            <widget class="QDateEdit" name="dateEdit_6">
             <property name="displayFormat">
              <string>yyyy-MM-dd</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
             </property>
             <property name="timeSpec">
              <enum>Qt::UTC</enum>
@@ -469,6 +487,9 @@
             <property name="displayFormat">
              <string>yyyy-MM-dd</string>
             </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
             <property name="timeSpec">
              <enum>Qt::UTC</enum>
             </property>
@@ -478,6 +499,9 @@
            <widget class="QDateEdit" name="dateEdit_10">
             <property name="displayFormat">
              <string>yyyy-MM-dd</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
             </property>
             <property name="timeSpec">
              <enum>Qt::UTC</enum>
@@ -495,6 +519,9 @@
            <widget class="QDateEdit" name="dateEdit_8">
             <property name="displayFormat">
              <string>yyyy-MM-dd</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
             </property>
             <property name="timeSpec">
              <enum>Qt::UTC</enum>
@@ -520,9 +547,9 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="table">
+     <widget class="QWidget" name="RECAP">
       <attribute name="title">
-       <string>table</string>
+       <string>RECAP</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="1" column="0">

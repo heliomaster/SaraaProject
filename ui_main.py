@@ -185,7 +185,6 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
     def on_Calcul_clicked(self):
         return self.query_date_time()
 
-    #
     @pyqtSlot()
     def on_pushButton_clicked(self):
         self.setdata()
