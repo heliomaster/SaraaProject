@@ -246,15 +246,18 @@ class Moncuq(QSqlRelationalTableModel, TabView.Ui_Dialog):
         self.setEditStrategy(QSqlRelationalTableModel.OnFieldChange)
         self.setTable("Limites")
         self.select()
-        now = datetime.now().date()
-        print(now)
-        print(type(now))
+        self.now = datetime.now().date()
+        print(self.now)
+        print(type(self.now))
+
 
     def data(self, item, role):
-
         if role == Qt.BackgroundRole:
-            if item.column() == 2:
-                return QBrush(Qt.red) if QSqlQueryModel.data(self, item, Qt.DisplayRole) == "2015-01-01" else False
+            if item.column() == 3:
+                raw_format = QSqlQueryModel.data(self, item,Qt.DisplayRole)
+                formated_date = datetime.strptime(raw_format,"%Y-%m-%d").date()
+                print(formated_date)
+                return QBrush(Qt.red) if formated_date < self.now else False
         return QSqlQueryModel.data(self, item, role)
 
 
