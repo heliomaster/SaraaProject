@@ -37,10 +37,10 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.model.setHeaderData(1, Qt.Horizontal, "CDB")
         self.model.setHeaderData(2, Qt.Horizontal, "Copi")
         self.model.setHeaderData(3, Qt.Horizontal, "Avion")
-        self.model.setHeaderData(4, Qt.Horizontal, "datetime1")
-        self.model.setHeaderData(5, Qt.Horizontal, "datetime2")
-        self.model.setHeaderData(6, Qt.Horizontal, "pax1")
-        self.model.setHeaderData(7, Qt.Horizontal, "pax2")
+        self.model.setHeaderData(4, Qt.Horizontal, "pax1")
+        self.model.setHeaderData(5, Qt.Horizontal, "pax2")
+        self.model.setHeaderData(6, Qt.Horizontal, "datetime1")
+        self.model.setHeaderData(7, Qt.Horizontal, "datetime2")
         self.model.setHeaderData(8, Qt.Horizontal, "Mission")
         self.model.setHeaderData(9, Qt.Horizontal, "Observations")
         self.model.setHeaderData(10, Qt.Horizontal, "total")
@@ -63,10 +63,12 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         ###########  RELATION MODEL################
         aircraftType = self.model.fieldIndex('aircraft')
         self.model.setRelation(aircraftType, QSqlRelation("Aircraft", "id", "immatriculation"))
-        # self.tableView1.setItemDelegate(QSqlRelationalDelegate(self.tableView1))
+
         relModel = self.model.relationModel(aircraftType)
         self.comboBox_avion.setModel(relModel)
         self.comboBox_avion.setModelColumn(relModel.fieldIndex('immatriculation'))
+        self.comboBox_sel_ac.setModel(relModel)
+        self.comboBox_sel_ac.setModelColumn(relModel.fieldIndex('immatriculation'))
         mapper = QDataWidgetMapper()
         mapper.setModel(self.model)
         mapper.setItemDelegate(QSqlRelationalDelegate())
@@ -90,15 +92,10 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
             liste.append(pilot1)
         self.comboBox_pilot1.addItems(liste)
         self.comboBox_pilot2.addItems(liste)
-        #print(liste)
+        self.comboBox_pilote.addItems(liste)
+        self.comboBox_pilote2.addItems(liste)
 
-        # filling combobox AVEC TABLE VIEW
-        # self.query_pilot.setQuery()
-        # self.query_pilot.setHeaderData(0,Qt.Horizontal,"id")
-        # self.query_pilot.setHeaderData(0,Qt.Horizontal,"PILOTE COMMANDANT DE BORD")
-        # view = QTableView()
-        # self.comboBox_pilot1.setModel(self.query_pilot)
-        # self.comboBox_pilot1.setView(view)
+
 
     def setdata(self):
         query = QSqlQuery()
