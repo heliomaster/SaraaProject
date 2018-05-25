@@ -1,3 +1,5 @@
+"""MOÏSE : MOYEN OPERATIONNEL D'INFORMATION ET DE SOUTIEN  DES EQUIPAGES"""
+
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -46,8 +48,10 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.model.setHeaderData(10, Qt.Horizontal, "total")
         self.tableView.setModel(self.model)
         self.tableView.setSortingEnabled(True)
+        self.tableView.resizeColumnsToContents()
+        self.tableView.setColumnHidden(0, True)
 
-        # setting table in table
+        # setting table in table_2
         self.tableView_2.setModel(self.model)
         self.tableView_2.setSortingEnabled(True)
         self.tableView_2.resizeColumnsToContents()
@@ -253,7 +257,7 @@ class Moncuq(QSqlRelationalTableModel, TabView.Ui_Dialog):
 
     def data(self, item, role):
         if role == Qt.BackgroundRole:
-            if item.column() == 3:
+            if item.column() == 2 or item.column()== 3 or item.column() == 4:
                 raw_format = QSqlQueryModel.data(self, item,Qt.DisplayRole)
                 formated_date = datetime.strptime(raw_format,"%Y-%m-%d").date()
                 print(formated_date)
