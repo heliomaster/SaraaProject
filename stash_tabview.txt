@@ -1,0 +1,12 @@
+        ###########  RELATION MODEL################
+        aircraftType = self.model.fieldIndex('aircraft')
+        self.model.setRelation(aircraftType, QSqlRelation("Aircraft", "id", "immatriculation"))
+        # self.tableView1.setItemDelegate(QSqlRelationalDelegate(self.tableView1))
+        relModel = self.model.relationModel(aircraftType)
+        self.comboBox_avion.setModel(relModel)
+        self.comboBox_avion.setModelColumn(relModel.fieldIndex('immatriculation'))
+        mapper = QDataWidgetMapper()
+        mapper.setModel(self.model)
+        mapper.setItemDelegate(QSqlRelationalDelegate())
+        mapper.addMapping(self.comboBox_avion, aircraftType)
+        self.model.select()

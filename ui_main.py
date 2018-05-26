@@ -77,6 +77,7 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
     def print(self):
         name = (self.dateEdit.text())
         date = QDate.currentDate().toString()
+        pilot = self.lineEditPilote.text()
         html = ("""
                 < html >
                 < body >
@@ -84,9 +85,10 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
         world!
         <p>name is {}</p>
         <p> and the date is {}
+        <p> pilot is {}
         </body>
             < / html >
-                """).format(name, date)
+                """).format(name, date,pilot)
 
 
         # create a QPrinter object for the printer the user later selects

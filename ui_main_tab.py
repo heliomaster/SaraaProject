@@ -39,10 +39,10 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.model.setHeaderData(1, Qt.Horizontal, "CDB")
         self.model.setHeaderData(2, Qt.Horizontal, "Copi")
         self.model.setHeaderData(3, Qt.Horizontal, "Avion")
-        self.model.setHeaderData(4, Qt.Horizontal, "datetime1")
-        self.model.setHeaderData(5, Qt.Horizontal, "datetime2")
-        self.model.setHeaderData(6, Qt.Horizontal, "pax1")
-        self.model.setHeaderData(7, Qt.Horizontal, "pax2")
+        self.model.setHeaderData(4, Qt.Horizontal, "pax1")
+        self.model.setHeaderData(5, Qt.Horizontal, "pax2")
+        self.model.setHeaderData(6, Qt.Horizontal, "datetime1")
+        self.model.setHeaderData(7, Qt.Horizontal, "datetime2")
         self.model.setHeaderData(8, Qt.Horizontal, "Mission")
         self.model.setHeaderData(9, Qt.Horizontal, "Observations")
         self.model.setHeaderData(10, Qt.Horizontal, "total")
@@ -66,24 +66,35 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
 
         ###########  RELATION MODEL################
         aircraftType = self.model.fieldIndex('aircraft')
-        self.model.setRelation(aircraftType, QSqlRelation("Aircraft", "id", "immatriculation"))
-        # self.tableView1.setItemDelegate(QSqlRelationalDelegate(self.tableView1))
-        relModel = self.model.relationModel(aircraftType)
-        self.comboBox_avion.setModel(relModel)
-        self.comboBox_avion.setModelColumn(relModel.fieldIndex('immatriculation'))
-        mapper = QDataWidgetMapper()
-        mapper.setModel(self.model)
-        mapper.setItemDelegate(QSqlRelationalDelegate())
-        mapper.addMapping(self.comboBox_avion, aircraftType)
-        self.model.select()
+        self.model.setRelation(aircraftType, QSqlRelation("Aircraft", "immatriculation", "immatriculation"))
+        pilot_type_cdb = self.model.fieldIndex('CDB')
+        self.model.setRelation(pilot_type_cdb,QSqlRelation("Pilot","last_name","last_name"))
+        pilot_type_fo = self.model.fieldIndex('Copi')
+        self.model.setRelation(pilot_type_fo,QSqlRelation("Pilot","last_name","last_name"))
 
-        # appel de class pour qdialogu2
-        self.enter_new_AC.clicked.connect(self.afficher_classe2)
-        self.dialog = Dialogu2(self)
 
-        # appel de classe pour dialogu3
-        self.enter_new_pilot.clicked.connect(self.afficher_classe3)
-        self.dialogu3 = Dialogu_3(self)
+        # #self.comboBox_avion.setModel(self.model)
+        # # self.comboBox_avion.setItemDelegate(QSqlRelationalDelegate(self.comboBox_avion))
+        # relModel = self.model.relationModel(aircraftType)
+        # #self.comboBox_avion.setModel(relModel)
+        # #self.comboBox_avion.setModelColumn(relModel.fieldIndex('immatriculation'))
+        #
+        # self.comboBox_sel_ac.setModel(relModel)
+        # self.comboBox_sel_ac.setModelColumn(relModel.fieldIndex('immatriculation'))
+        # print(self.comboBox_sel_ac.setModelColumn(relModel.fieldIndex('immatriculation')))
+
+
+
+        #Filling combox _avion
+
+        query_aircraft = QSqlQuery("SELECT immatriculation FROM Aircraft")
+        liste_ac = []
+        while query_aircraft.next():
+            aircraft = query_aircraft.value(0)
+            liste_ac.append(aircraft)
+        self.comboBox_avion.addItems(liste_ac)
+        self.comboBox_sel_ac.addItems(liste_ac)
+
 
         # Filling combox pilot
         # todo: set relation sql
@@ -94,15 +105,36 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
             liste.append(pilot1)
         self.comboBox_pilot1.addItems(liste)
         self.comboBox_pilot2.addItems(liste)
-        #print(liste)
+        self.comboBox_pilote.addItems(liste)
+        self.comboBox_pilote2.addItems(liste)
 
-        # filling combobox AVEC TABLE VIEW
-        # self.query_pilot.setQuery()
-        # self.query_pilot.setHeaderData(0,Qt.Horizontal,"id")
-        # self.query_pilot.setHeaderData(0,Qt.Horizontal,"PILOTE COMMANDANT DE BORD")
-        # view = QTableView()
-        # self.comboBox_pilot1.setModel(self.query_pilot)
-        # self.comboBox_pilot1.setView(view)
+
+        # appel de class pour qdialogu2
+        self.enter_new_AC.clicked.connect(self.afficher_classe2)
+        self.dialog = Dialogu2(self)
+
+        # appel de classe pour dialogu3
+        self.enter_new_pilot.clicked.connect(self.afficher_classe3)
+        self.dialogu3 = Dialogu_3(self)
+
+
+    #
+    #     self.comboBox_avion.activated.connect(self.mapper1())
+    #
+    # def mapper1(self):
+    #     mapper = QDataWidgetMapper()
+    #     self.model.setTable("Aircract")
+    #     mapper.setModel(self.model)
+    #     mapper.setItemDelegate(QSqlRelationalDelegate())
+    #     mapper.addMapping(self.comboBox_avion, 1)
+    #     self.model.select()
+
+    # @pyqtSlot()
+    # def on_comboBox_avion_currentIndexChanged(self):
+    #     self.mapper1()
+    #     print("marche")
+
+
 
     def setdata(self):
         query = QSqlQuery()
@@ -110,7 +142,7 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
             "INSERT INTO Mission (cdb,copi,aircraft,datetime1,datetime2,pax1,pax2,mission,observations,total)" "VALUES (?,?,?,?,?,?,?,?,?,?)")
         query.bindValue(0, self.comboBox_pilot1.currentText())
         query.bindValue(1, self.comboBox_pilot2.currentText())
-        query.bindValue(2, self.comboBox_avion.currentIndex())
+        query.bindValue(2, self.comboBox_avion.currentText())
         query.bindValue(3, self.dateTimeEdit.text())
         query.bindValue(4, self.dateTimeEdit_2.text())
         query.bindValue(5, self.lineEdit_pax1.text())
@@ -140,7 +172,7 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
     def on_pushButton_lim_inserer_clicked(self):
         self.setdata_limites_table()
 
-    #######remove row   lim#########
+    #######remove row   lim     #########
 
     def remove_row_lim(self):
         index = self.tableView_limites.currentIndex()
@@ -178,6 +210,8 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.remove_row()
 
     ##############################
+
+    #TODO: remove row aircraft and pilot
 
 
     ############### HOURS DATETIME DIFF#################
@@ -245,15 +279,15 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
 class Moncuq(QSqlRelationalTableModel, TabView.Ui_Dialog):
     """Class to display Limites Table and color and implement method DATA to override
     otherwise Model table would be selected"""
+
     def __init__(self, parent=None):
         super(Moncuq, self).__init__(parent)
         self.setEditStrategy(QSqlRelationalTableModel.OnFieldChange)
         self.setTable("Limites")
         self.select()
         self.now = datetime.now().date()
-        print(self.now)
-        print(type(self.now))
-
+        # print(self.now)
+        # print(type(self.now))
 
     def data(self, item, role):
         if role == Qt.BackgroundRole:
@@ -264,9 +298,7 @@ class Moncuq(QSqlRelationalTableModel, TabView.Ui_Dialog):
                 return QBrush(Qt.red) if formated_date < self.now else False
         return QSqlQueryModel.data(self, item, role)
 
-
-
-################# A CONVERVER EXEMPLE DISPLAY ROLE#############################
+    ################# A CONVERVER EXEMPLE DISPLAY ROLE#############################
     # def data(self, item, role):
     #     if role == Qt.BackgroundRole:
     #         if QSqlQueryModel.data(self, self.index(item.row(), 2), Qt.DisplayRole) == "Young":
@@ -276,29 +308,29 @@ class Moncuq(QSqlRelationalTableModel, TabView.Ui_Dialog):
     #             return True if QSqlQueryModel.data(self, item, Qt.DisplayRole) == 1 else False
     #     return QSqlQueryModel.data(self, item, role)
 
-###################################################################################
+    ###################################################################################
 
-        # def create_limit_table(self):
-        #     """Setting Table for Limits"""
+    # def create_limit_table(self):
+    #     """Setting Table for Limits"""
 
-        # model = QSqlRelationalTableModel()
-        # self.setTable("Limites")
-        # self.select()
-        # self.tableView_limites.setModel()
+    # model = QSqlRelationalTableModel()
+    # self.setTable("Limites")
+    # self.select()
+    # self.tableView_limites.setModel()
 
-        # tableviewmodel = QSqlQueryModel()
-        #
-        #
-        # tableviewmodel.setQuery("SELECT * FROM Limites")
-        # tableviewmodel.setHeaderData(0,Qt.Horizontal,"PILOTES")
-        # tableviewmodel.setHeaderData(1, Qt.Horizontal, "CEMPN")
-        # tableviewmodel.setHeaderData(2, Qt.Horizontal, "VSA")
-        # tableviewmodel.setHeaderData(3, Qt.Horizontal, "LICENSE")
-        #
-        # self.tableView_limites.setModel(tableviewmodel)
-        # self.tableView_limites.setSortingEnabled(True)
-        # self.tableView_limites.resizeColumnsToContents()
-        # self.tableView_limites.setAlternatingRowColors(True)
+    # tableviewmodel = QSqlQueryModel()
+    #
+    #
+    # tableviewmodel.setQuery("SELECT * FROM Limites")
+    # tableviewmodel.setHeaderData(0,Qt.Horizontal,"PILOTES")
+    # tableviewmodel.setHeaderData(1, Qt.Horizontal, "CEMPN")
+    # tableviewmodel.setHeaderData(2, Qt.Horizontal, "VSA")
+    # tableviewmodel.setHeaderData(3, Qt.Horizontal, "LICENSE")
+    #
+    # self.tableView_limites.setModel(tableviewmodel)
+    # self.tableView_limites.setSortingEnabled(True)
+    # self.tableView_limites.resizeColumnsToContents()
+    # self.tableView_limites.setAlternatingRowColors(True)
 
 
 # class SubClassTableModel(QSqlRelationalTableModel):
