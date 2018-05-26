@@ -294,7 +294,6 @@ class Moncuq(QSqlRelationalTableModel, TabView.Ui_Dialog):
             if item.column() == 2 or item.column()== 3 or item.column() == 4:
                 raw_format = QSqlQueryModel.data(self, item,Qt.DisplayRole)
                 formated_date = datetime.strptime(raw_format,"%Y-%m-%d").date()
-                print(formated_date)
                 return QBrush(Qt.red) if formated_date < self.now else False
         return QSqlQueryModel.data(self, item, role)
 
