@@ -57,6 +57,13 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         self.tableView_2.resizeColumnsToContents()
         self.tableView_2.setColumnHidden(0, True)
 
+        #setting table_view 3
+
+        self.tableView_3.setModel(self.model)
+        self.tableView_3.setSortingEnabled(True)
+        self.tableView_3.resizeColumnsToContents()
+        self.tableView_3.setColumnHidden(0, True)
+
         # call to moncuq class with edit resize columns
         self.mydata = Moncuq()
         self.tableView_limites.setModel(self.mydata)
@@ -172,6 +179,26 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
     def on_pushButton_lim_inserer_clicked(self):
         self.setdata_limites_table()
 
+    #########  SETTING QUERIES ON TABLEVIEW3#################
+
+    def query_date_time(self):
+        self.model.setTable("Mission")
+        combodate_1 = self.dateEdit.text()
+        combodate_2 = self.dateEdit_2.text()
+        filter = "cast(datetime1 as datetime)between cast('{}' as datetime) and cast('{}' as datetime)".format(
+            combodate_1, combodate_2)
+        self.model.setFilter(filter)
+        self.model.select()
+
+    # @pyqtSlot()
+    # def on_calculer_clicked(self):
+    #     print("marche")
+    #     #self.query_date_time()
+
+
+
+
+
     #######remove row   lim     #########
 
     def remove_row_lim(self):
@@ -211,7 +238,7 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
 
     ##############################
 
-    #TODO: remove row aircraft and pilot
+    #TODO:  write remove method for row aircraft and pilot
 
 
     ############### HOURS DATETIME DIFF#################
@@ -228,14 +255,17 @@ class MainDialog(QDialog, TabView.Ui_Dialog):
         return total
 
     def hours_minutes(self):
-        """conversion of time delta to hours"""
+        """conversion of time delta get_date_diff to hours"""
         td = self.get_date_diff()
         resultat = td.days * 24 + td.seconds // 3600
         return resultat
 
     @pyqtSlot()
     def on_calculer_clicked(self):
-        str(self.get_date_diff)
+        self.lineEdit_heures_total.setText(str(self.hours_minutes()))
+        #self.query_date_time()
+
+
 
     #########################################
 

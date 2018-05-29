@@ -54,11 +54,72 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
         self.model.setHeaderData(3, Qt.Horizontal, "datetime2")
         self.model.setHeaderData(4, Qt.Horizontal, "aircraft")
 
-        # tableview created in qt designer assigned to tablemodel
+        # tableview created in qt designer assigned to tablemodel1
         self.tableView1.setModel(self.model)
         self.tableView1.resizeColumnsToContents()
         self.tableView1.setColumnHidden(0,True)
         self.label_total.setText(str(self.hours_minutes()))
+
+        # self.fourqueux = Fourqeux()
+        self.proxymodel()
+
+    ###########Proxymodel#################################
+    def proxymodel(self):
+
+        self.proxymodel = QSortFilterProxyModel()
+        self.proxymodel.setSourceModel(self.model)
+        self.proxymodel.setDynamicSortFilter(True)
+        self.proxymodel.setFilterCaseSensitivity(Qt.CaseInsensitive)
+        self.proxymodel.setFilterKeyColumn(-1)
+        #self.proxymodel.setFilterFixedString("azerty")
+
+        self.tableView2.setModel(self.proxymodel)
+        self.tableView2.setAlternatingRowColors(True)
+
+        self.lineEdit.textChanged.connect(self.proxymodel.setFilterFixedString)
+
+
+    # @pyqtSlot()
+    # def on_lineEdit_textChanged(self):
+    #     print("marche")
+
+
+
+
+
+    def filter_table(self):
+        combodate = self.dateEdit.text()
+        combodate_2 = self.dateEdit_2.text()
+        filter = "cast(datetime1 as datetime)between cast('{}' as datetime) and cast('{}' as datetime)".format(
+            combodate, combodate_2)
+
+    def filterAcceptsRow(self, sourceRow, sourceParent):
+        index0 = self.sourceModel().index(sourceRow, 0, sourceParent)
+        index1 = self.sourceModel().index(sourceRow, 1, sourceParent)
+        index2 = self.sourceModel().index(sourceRow, 2, sourceParent)
+
+    def dateInRange(self, date):
+        return (self.minDate.isValid() or date > self.minDate) and (self.maxDate.isValid() or date <self.maxDate)
+
+    def setFilterMinimumDate(self, date):
+        self.minDate = date
+        self.invalidateFilter()
+
+    def setFilterMaximumDate(self, date):
+        self.maxDate = date
+        self.invalidateFilter()
+
+    @pyqtSlot()
+    def on_pushButton_filter_clicked(self):
+        self.filter_table()
+
+
+
+        # tableview created in qt designer assigned to tablemodel2
+        # self.tableView2.setModel(self.model)
+        # self.tableView2.resizeColumnsToContents()
+        # self.tableView2.setColumnHidden(0,True)
+        # self.label_total.setText(str(self.hours_minutes()))
 
         # #travail sur PDF
     # def print(self):
@@ -124,14 +185,14 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
         self.model.setTable("Contact1")
         combodate = self.dateEdit.text()
         combodate_2 = self.dateEdit_2.text()
-        print(type(combodate))
-        print(combodate)
-        print(type(combodate_2))
-        print(combodate_2)
+        # print(type(combodate))
+        # print(combodate)
+        # print(type(combodate_2))
+        # print(combodate_2)
         #self.model.setFilter("datetime1 between'1997/12/31' and '1999/12/31' ")
         #self.model.setFilter("datetime1 = '1997/12/31 17:00'")
         filter = "cast(datetime1 as datetime)between cast('{}' as datetime) and cast('{}' as datetime)".format(combodate,combodate_2)
-        print(filter)
+        #print(filter)
         self.model.setFilter(filter)
         #self.model.setFilter("datetime1 LIKE '{} {}'".format(combodate, '%'))
         #self.model.setFilter("datetime1 LIKE '01-01-2000%'")
@@ -141,8 +202,11 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
         self.model.select()
         for i in range(self.model.rowCount()):
             date1 = self.model.record(i).value("datetime1")
+            date1_time = datetime.strptime(date1,"%Y/%m/%d %H:%M")
             date2 = self.model.record(i).value("datetime2")
             print('values are: {} and {}'.format(date1,date2))
+            print(type(date1_time))
+
 
 
     def affiche(self):
@@ -176,6 +240,9 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
             self.model.submitAll()
             return
 
+
+
+
     @pyqtSlot()
     def on_pushButton_print_clicked(self):
         self.print()
@@ -198,6 +265,32 @@ class MainDialog(QDialog, qtSqlTry.Ui_Form):
     @pyqtSlot()
     def on_pushButton_effacer_clicked(self):
         self.effacer()
+
+
+# class Fourqeux(QSortFilterProxyModel,qtSqlTry.Ui_Form):
+#
+#     def __init__(self,parent=None):
+#         super(Fourqeux, self).__init__(parent)
+#         self.model = QSqlRelationalTableModel()
+#         self.model.setTable("Contact1")
+       #
+       # table.setModel(self.model)
+
+
+
+        # proxymodel = QSortFilterProxyModel(self)
+        # proxymodel.setSourceModel(self.model)
+        # self.table.setModel(proxymodel)
+
+
+    # def sorting(self):
+    #     self.maindialog.lineEditPilote.setText()
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
